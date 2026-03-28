@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 
 const USDA_API_KEY = "bxTVPsdeKYnXputtfjTSzFBme1LA7TvBxeLUsni6";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(request: Request) {
   try {
     const { ingredients } = await request.json();
