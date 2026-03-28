@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String  @id @default(cuid())
+  username String  @unique
+  password String
+  meals    Meal[]
+}
+
+model Meal {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  calories    Int
+  protein     Float
+  carbs       Float
+  fat         Float
+  ingredients String // JSON representation of ingredients and breakdowns
+  createdAt   DateTime @default(now())
+}
+
+model SyncSession {
+  id        String   @id
+  image     String // Base64 or URL
+  createdAt DateTime @default(now())
+}

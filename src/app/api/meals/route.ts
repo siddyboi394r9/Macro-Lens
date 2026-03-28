@@ -1,0 +1,31 @@
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+
+export async function POST(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user || !session.user.id) {
+       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const { calories, protein, carbs, fat, breakdown } = body;
+
+    const meal = await prisma.meal.create({
+      data: {
+        userId: session.user.id,
+        calories,
+        protein,
+        carbs,
+        fat,
+        ingredients: JSON.stringify(breakdown)
+      }
+    });
+
+    return NextResponse.json({ success: true, meal });
+  } catch {
+    return NextResponse.json({ error: "Failed to save meal" }, { status: 500 });
+  }
+}
