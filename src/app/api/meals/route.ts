@@ -28,7 +28,9 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true, meal });
-  } catch {
-    return NextResponse.json({ error: "Failed to save meal" }, { status: 500 });
+  } catch (err: unknown) {
+    const error = err as Error;
+    console.error("Meal creation failed:", error);
+    return NextResponse.json({ error: `Failed to save meal: ${error.message}` }, { status: 500 });
   }
 }
