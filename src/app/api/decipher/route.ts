@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     const buffer = Buffer.from(arrayBuffer);
     const mimeType = image.type || 'image/jpeg';
     
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     
     const prompt = `You are an elite automated nutrition parser analyzing food images.
 Look closely at the provided food image. Identify ALL the discernible raw ingredients, cooking mediums, and sub-components used to make or represent this plate.
@@ -54,8 +54,7 @@ Your response must be exclusively the JSON array literal. Do not add any convers
     }
 
     return NextResponse.json({ ingredients });
-  } catch (err) {
-    console.error("Gemini Error:", err);
-    return NextResponse.json({ error: 'Failed to process the image through the AI model' }, { status: 500 });
+  } catch (err: any) {
+    return NextResponse.json({ error: `AI Processing Failed: ${err.message}` }, { status: 500 });
   }
 }

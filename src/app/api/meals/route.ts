@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { calories, protein, carbs, fat, breakdown } = body;
+    const { calories, protein, carbs, fat, breakdown, image } = body;
 
     const meal = await prisma.meal.create({
       data: {
@@ -22,7 +22,8 @@ export async function POST(request: Request) {
         protein,
         carbs,
         fat,
-        ingredients: JSON.stringify(breakdown)
+        ingredients: JSON.stringify(breakdown),
+        image
       }
     });
 

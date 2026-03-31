@@ -116,16 +116,45 @@ export default function Home() {
   };
 
   const handleSaveMeal = async () => {
+    if (!image || !nutrition) return;
     setIsSaving(true);
     try {
+      // Convert image File to Base64 for storage
+      const reader = new FileReader();
+      const base64Promise = new Promise<string>((resolve) => {
+        reader.onloadend = () => resolve(reader.result as string);
+      });
+      reader.readAsDataURL(image);
+      const base64ImageRaw = await base64Promise;
+
+      // Compress using Canvas
+      const compressedBase64 = await new Promise<string>((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          // Max dimension 800px for history
+          const scale = Math.min(1, 800 / Math.max(img.width, img.height));
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+          ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
+          // Compress to 0.7 quality jpeg
+          resolve(canvas.toDataURL("image/jpeg", 0.7));
+        };
+        img.src = base64ImageRaw;
+      });
+
       const res = await fetch("/api/meals", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(nutrition),
+        body: JSON.stringify({
+          ...nutrition,
+          image: compressedBase64
+        }),
       });
       if (res.ok) setSaved(true);
-    } catch {
-      console.error("Failed to save meal");
+    } catch (err) {
+      console.error("Failed to save meal:", err);
     } finally {
       setIsSaving(false);
     }

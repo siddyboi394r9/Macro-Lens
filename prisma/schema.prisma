@@ -23,6 +23,7 @@ model Meal {
   carbs       Float
   fat         Float
   ingredients String // JSON representation of ingredients and breakdowns
+  image       String? // Base64 or URL of the analyzed meal photo
   createdAt   DateTime @default(now())
 }
 
