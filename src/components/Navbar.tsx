@@ -18,6 +18,12 @@ export function Navbar() {
         {session ? (
           <>
             <Link href="/history" className="subtitle" style={{ textDecoration: "none", color: "white", fontWeight: 600 }}>🕰️ History</Link>
+            {(session.user as any)?.isAdmin && (
+              <>
+                <span className="subtitle" style={{ opacity: 0.3 }}>|</span>
+                <Link href="/admin" className="subtitle" style={{ textDecoration: "none", color: "var(--accent-warning)", fontWeight: 800 }}>⚙️ Admin</Link>
+              </>
+            )}
             <span className="subtitle" style={{ opacity: 0.3 }}>|</span>
             <span style={{ fontWeight: 600, color: "var(--accent-primary)" }}>@{session.user?.name}</span>
             <button onClick={() => signOut()} className="btn btn-secondary" style={{ padding: "0.5rem 1rem", fontSize: "0.9rem" }}>Log Out</button>

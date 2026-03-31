@@ -7,6 +7,7 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: string;
+      isAdmin?: boolean;
     } & DefaultSession["user"]
   }
 }
@@ -24,6 +25,17 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.username || !credentials?.password) return null;
 
         try {
+          // 1. Admin Override Check
+          if (
+            process.env.ADMIN_USERNAME && process.env.ADMIN_PASSWORD &&
+            credentials.username === process.env.ADMIN_USERNAME && 
+            credentials.password === process.env.ADMIN_PASSWORD
+          ) {
+            console.log("Admin account authenticated.");
+            return { id: "admin-superuser", name: "Administrator", isAdmin: true };
+          }
+
+          // 2. Standard User Registration & Login
           if (credentials.isRegister === "true") {
              console.log("Attempting registration for:", credentials.username);
              const existing = await prisma.user.findUnique({ where: { username: credentials.username }});
@@ -59,12 +71,16 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user }) {
-      if (user) { token.id = user.id; }
+      if (user) { 
+        token.id = user.id;
+        if ((user as any).isAdmin) token.isAdmin = true;
+      }
       return token;
     },
     async session({ session, token }) {
       if (session?.user && token.id) {
         session.user.id = token.id as string;
+        session.user.isAdmin = !!token.isAdmin;
       }
       return session;
     }
