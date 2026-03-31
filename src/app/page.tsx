@@ -167,7 +167,7 @@ export default function Home() {
         <p className="subtitle">Snap a photo of your meal. AI will handle the rest.</p>
       </header>
 
-      <div style={{ display: "grid", gridTemplateColumns: image ? "1fr" : "1fr 300px", gap: "2rem", transition: "all 0.5s ease" }}>
+      <div className="analysis-grid" style={{ display: "grid", gridTemplateColumns: image ? "1fr" : "1fr 300px", gap: "2rem", transition: "all 0.5s ease" }}>
         
         {/* Main Interface Block */}
         <div className="glass-panel animate-fade-in delay-100 flex-col gap-6" style={{ alignItems: "center", justifyContent: "center", textAlign: "center", minHeight: "400px" }}>
@@ -236,7 +236,7 @@ export default function Home() {
 
         {/* Live Link QR Block (Only visible when no image is loaded) */}
         {!image && (
-           <div className="glass-panel animate-fade-in delay-200 flex-col flex-center text-center gap-4" style={{ padding: "2rem" }}>
+           <div className="live-link-box glass-panel animate-fade-in delay-200 flex-col flex-center text-center gap-4" style={{ padding: "2rem" }}>
               <div style={{ background: "rgba(168,85,247,0.1)", padding: "1rem", borderRadius: "50%", marginBottom: "0.5rem" }}>
                  <span style={{ fontSize: "2rem" }}>📱</span>
               </div>

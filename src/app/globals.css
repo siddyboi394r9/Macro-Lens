@@ -326,7 +326,11 @@ h1, h2, h3, h4, h5, p {
   }
 
   /* Specific mobile analysis flow adjustments */
-  .meal-analysis-grid {
+  .analysis-grid {
      grid-template-columns: 1fr !important;
+  }
+  
+  .live-link-box {
+     display: none !important;
   }
 }
