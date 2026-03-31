@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import type { Meal as PrismaMeal } from "@prisma/client";
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine, AreaChart, Area
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, AreaChart, Area
 } from "recharts";
 
 type Meal = PrismaMeal & { image?: string | null };
