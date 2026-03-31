@@ -19,7 +19,28 @@ export async function POST(request: Request) {
     const buffer = Buffer.from(arrayBuffer);
     const mimeType = image.type || 'image/jpeg';
     
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // Dynamically query available models to prevent 404 deprecated model errors
+    const modelFetch = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${process.env.GEMINI_API_KEY}`);
+    const modelData = await modelFetch.json();
+    let targetModelId = "gemini-1.5-flash";
+    
+    if (modelData.models) {
+      type GeminiModel = { supportedGenerationMethods?: string[], name: string };
+      const validModels = modelData.models.filter((m: GeminiModel) => m.supportedGenerationMethods?.includes("generateContent"));
+      const flashModel = validModels.find((m: GeminiModel) => m.name.includes("flash"));
+      const proModel = validModels.find((m: GeminiModel) => m.name.includes("pro"));
+      
+      if (flashModel) {
+        targetModelId = flashModel.name.replace("models/", "");
+      } else if (proModel) {
+        targetModelId = proModel.name.replace("models/", "");
+      } else if (validModels.length > 0) {
+        targetModelId = validModels[0].name.replace("models/", "");
+      }
+    }
+
+    const model = genAI.getGenerativeModel({ model: targetModelId });
+
     
     const prompt = `You are an elite automated nutrition parser analyzing food images.
 Look closely at the provided food image. Identify ALL the discernible raw ingredients, cooking mediums, and sub-components used to make or represent this plate.
