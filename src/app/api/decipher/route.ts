@@ -54,7 +54,8 @@ Your response must be exclusively the JSON array literal. Do not add any convers
     }
 
     return NextResponse.json({ ingredients });
-  } catch (err: any) {
-    return NextResponse.json({ error: `AI Processing Failed: ${err.message}` }, { status: 500 });
+  } catch (err: unknown) {
+    const error = err as Error;
+    return NextResponse.json({ error: `AI Processing Failed: ${error.message}` }, { status: 500 });
   }
 }

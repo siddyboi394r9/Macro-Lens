@@ -3,7 +3,6 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import type { Meal } from "@prisma/client";
 import { redirect } from "next/navigation";
-import Image from "next/image";
 import "../globals.css";
 
 export const dynamic = 'force-dynamic';
@@ -44,6 +43,7 @@ export default async function History() {
                   <div key={meal.id} className="glass-panel meal-card flex-col">
                      <div className="meal-image-container">
                         {meal.image ? (
+                           /* eslint-disable-next-line @next/next/no-img-element */
                            <img 
                               src={meal.image} 
                               alt="Logged Meal" 
@@ -83,7 +83,7 @@ export default async function History() {
                         <div className="ingredients-summary">
                            <p className="macro-label" style={{ marginBottom: "0.5rem" }}>Key Ingredients:</p>
                            <div className="ingredients-chips">
-                              {items.slice(0, 4).map((ing: any, i: number) => (
+                              {items.slice(0, 4).map((ing: {originalName: string}, i: number) => (
                                  <span key={i} className="ingredient-chip">
                                     {ing.originalName}
                                  </span>
