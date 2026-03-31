@@ -1,6 +1,6 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import type { NextAuthOptions, DefaultSession } from "next-auth";
 
 declare module "next-auth" {
@@ -23,20 +23,34 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.username || !credentials?.password) return null;
 
-        if (credentials.isRegister === "true") {
-           const existing = await prisma.user.findUnique({ where: { username: credentials.username }});
-           if (existing) throw new Error("Username taken");
-           const hashed = await bcrypt.hash(credentials.password, 10);
-           const user = await prisma.user.create({
-             data: { username: credentials.username, password: hashed }
-           });
-           return { id: user.id, name: user.username };
-        } else {
-           const user = await prisma.user.findUnique({ where: { username: credentials.username } });
-           if (!user) throw new Error("User not found");
-           const isValid = await bcrypt.compare(credentials.password, user.password);
-           if (!isValid) throw new Error("Invalid password");
-           return { id: user.id, name: user.username };
+        try {
+          if (credentials.isRegister === "true") {
+             console.log("Attempting registration for:", credentials.username);
+             const existing = await prisma.user.findUnique({ where: { username: credentials.username }});
+             if (existing) throw new Error("Username taken");
+             
+             const hashed = await bcrypt.hash(credentials.password, 10);
+             const user = await prisma.user.create({
+               data: { username: credentials.username, password: hashed }
+             });
+             console.log("Registration successful for:", user.username);
+             return { id: user.id, name: user.username };
+          } else {
+             console.log("Attempting login for:", credentials.username);
+             const user = await prisma.user.findUnique({ where: { username: credentials.username } });
+             if (!user) throw new Error("User not found");
+             
+             const isValid = await bcrypt.compare(credentials.password, user.password);
+             if (!isValid) throw new Error("Invalid password");
+             
+             console.log("Login successful for:", user.username);
+             return { id: user.id, name: user.username };
+          }
+        } catch (err: unknown) {
+          const error = err as Error;
+          console.error("AUTH_ERROR:", error.message);
+          // Re-throw so NextAuth handles it, but now we have it in our logs
+          throw error;
         }
       }
     })
