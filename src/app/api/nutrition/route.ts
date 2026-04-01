@@ -41,14 +41,38 @@ export async function POST(request: Request) {
           if (n.nutrientNumber === '204' || n.nutrientNumber === '1004') f = n.value;
         });
 
-        // Parse amount for a rough estimate (Assuming USDA returns value per 100g usually)
-        // If amount contains 'g', we extract it, otherwise default to 100g multiplier = 1
+        // Helper to convert units to grams for USDA 100g base calculation
+        const convertToGrams = (amountStr: string): number => {
+          const match = amountStr.match(/^(\d+(?:\.\d+)?)\s*([a-zA-Z\s]+)$/);
+          if (!match) return 0;
+
+          const value = parseFloat(match[1]);
+          const unit = match[2].toLowerCase().trim();
+
+          if (unit === 'g' || unit === 'gram' || unit === 'grams' || unit === 'ml' || unit === 'milliliter' || unit === 'milliliters') {
+            return value;
+          }
+          if (unit === 'oz' || unit === 'ounce' || unit === 'ounces' || unit === 'fl oz') {
+            return value * 28.35;
+          }
+          if (unit === 'cup' || unit === 'cups') {
+            return value * 240;
+          }
+          if (unit === 'tbsp' || unit === 'tablespoon' || unit === 'tablespoons') {
+            return value * 15;
+          }
+          if (unit === 'tsp' || unit === 'teaspoon' || unit === 'teaspoons') {
+            return value * 5;
+          }
+          return value; // Default to assumed grams if unit is unrecognized
+        };
+
         let multiplier = 1;
-        if (typeof ing.amount === 'string' && ing.amount.toLowerCase().includes('g')) {
-            const parsedGrams = parseInt(ing.amount);
-            if (!isNaN(parsedGrams)) {
-              multiplier = parsedGrams / 100;
-            }
+        if (typeof ing.amount === 'string') {
+          const grams = convertToGrams(ing.amount);
+          if (grams > 0) {
+            multiplier = grams / 100;
+          }
         }
 
         return {
