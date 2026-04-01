@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   const session = await getServerSession(authOptions);
   
-  if (!session || !session.user || !(session.user as any).isAdmin) {
+  if (!session || !session.user || !session.user.isAdmin) {
      return NextResponse.json({ error: "Unauthorized Server Action. Admin access required." }, { status: 401 });
   }
 

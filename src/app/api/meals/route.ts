@@ -18,10 +18,10 @@ export async function POST(request: Request) {
     const meal = await prisma.meal.create({
       data: {
         userId: session.user.id,
-        calories,
-        protein,
-        carbs,
-        fat,
+        calories: Math.round(calories),
+        protein: Math.round(protein),
+        carbs: Math.round(carbs),
+        fat: Math.round(fat),
         ingredients: JSON.stringify(breakdown),
         image
       }

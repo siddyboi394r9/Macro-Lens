@@ -73,7 +73,10 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) { 
         token.id = user.id;
-        if ((user as any).isAdmin) token.isAdmin = true;
+        // Correctly handle isAdmin property from the authorize return object
+        if ("isAdmin" in user && user.isAdmin) {
+          token.isAdmin = true;
+        }
       }
       return token;
     },

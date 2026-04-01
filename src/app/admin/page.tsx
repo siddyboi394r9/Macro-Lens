@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 export default async function AdminDashboard() {
   const session = await getServerSession(authOptions);
   
-  if (!session || !session.user || !(session.user as any).isAdmin) {
+  if (!session || !session.user || !session.user.isAdmin) {
      redirect("/");
   }
 

@@ -106,11 +106,11 @@ export async function POST(request: Request) {
       totalNutrition.breakdown.push(res);
     });
     
-    // Round macros
+    // Round macros to whole integers
     totalNutrition.calories = Math.round(totalNutrition.calories);
-    totalNutrition.protein = Math.round(totalNutrition.protein * 10) / 10;
-    totalNutrition.carbs = Math.round(totalNutrition.carbs * 10) / 10;
-    totalNutrition.fat = Math.round(totalNutrition.fat * 10) / 10;
+    totalNutrition.protein = Math.round(totalNutrition.protein);
+    totalNutrition.carbs = Math.round(totalNutrition.carbs);
+    totalNutrition.fat = Math.round(totalNutrition.fat);
 
     return NextResponse.json({ nutrition: totalNutrition });
 

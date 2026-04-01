@@ -303,25 +303,25 @@ export default function Home() {
             
             <div className="glass-panel flex-col flex-center cursor-default" style={{ padding: "2rem 1rem", border: "1px solid rgba(245, 158, 11, 0.4)" }}>
               <p className="subtitle" style={{ fontSize: "1rem" }}>Calories</p>
-              <h3 style={{ fontSize: "3rem", margin: 0, fontWeight: 800 }}>{nutrition.calories}</h3>
+              <h3 style={{ fontSize: "3rem", margin: 0, fontWeight: 800 }}>{Math.round(nutrition.calories)}</h3>
               <p style={{ fontSize: "0.8rem", color: "var(--accent-warning)" }}>kcal</p>
             </div>
             
             <div className="glass-panel flex-col flex-center cursor-default" style={{ padding: "2rem 1rem", border: "1px solid rgba(168, 85, 247, 0.4)" }}>
               <p className="subtitle" style={{ fontSize: "1rem" }}>Protein</p>
-              <h3 style={{ fontSize: "3rem", margin: 0, fontWeight: 800 }}>{nutrition.protein}g</h3>
+              <h3 style={{ fontSize: "3rem", margin: 0, fontWeight: 800 }}>{Math.round(nutrition.protein)}g</h3>
               <p style={{ fontSize: "0.8rem", color: "var(--accent-primary)" }}>macros</p>
             </div>
             
             <div className="glass-panel flex-col flex-center cursor-default" style={{ padding: "2rem 1rem", border: "1px solid rgba(16, 185, 129, 0.4)" }}>
               <p className="subtitle" style={{ fontSize: "1rem" }}>Carbs</p>
-              <h3 style={{ fontSize: "3rem", margin: 0, fontWeight: 800 }}>{nutrition.carbs}g</h3>
+              <h3 style={{ fontSize: "3rem", margin: 0, fontWeight: 800 }}>{Math.round(nutrition.carbs)}g</h3>
               <p style={{ fontSize: "0.8rem", color: "var(--accent-success)" }}>macros</p>
             </div>
             
             <div className="glass-panel flex-col flex-center cursor-default" style={{ padding: "2rem 1rem", border: "1px solid rgba(59, 130, 246, 0.4)" }}>
               <p className="subtitle" style={{ fontSize: "1rem" }}>Fat</p>
-              <h3 style={{ fontSize: "3rem", margin: 0, fontWeight: 800 }}>{nutrition.fat}g</h3>
+              <h3 style={{ fontSize: "3rem", margin: 0, fontWeight: 800 }}>{Math.round(nutrition.fat)}g</h3>
               <p style={{ fontSize: "0.8rem", color: "var(--accent-secondary)" }}>macros</p>
             </div>
             
@@ -333,7 +333,7 @@ export default function Home() {
                {nutrition.breakdown.map((item: {originalName: string; fdcName: string; amount: string; macros: {calories: number}}, i: number) => (
                  <li key={i} style={{ display: "flex", justifyContent: "space-between", padding: "1rem", background: "rgba(255,255,255,0.05)", borderLeft: "4px solid var(--accent-primary)", borderRadius: "var(--radius-sm)" }}>
                    <span>{item.originalName} ({item.amount}) <span style={{color: "gray", fontSize: "0.8rem", marginLeft: "10px"}}>mapped to: {item.fdcName}</span></span>
-                   <span style={{ color: "var(--accent-secondary)", fontWeight: 600 }}>{item.macros.calories} kcal</span>
+                   <span style={{ color: "var(--accent-secondary)", fontWeight: 600 }}>{Math.round(item.macros.calories)} kcal</span>
                  </li>
                ))}
              </ul>

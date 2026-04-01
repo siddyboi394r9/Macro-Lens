@@ -65,10 +65,10 @@ export default function HistoryClient({ initialMeals }: { initialMeals: Meal[] }
       if (!dailyData[dateStr]) {
         dailyData[dateStr] = { date: dateStr, dateObj: d, calories: 0, protein: 0, carbs: 0, fat: 0 };
       }
-      dailyData[dateStr].calories += meal.calories;
-      dailyData[dateStr].protein += meal.protein;
-      dailyData[dateStr].carbs += meal.carbs;
-      dailyData[dateStr].fat += meal.fat;
+      dailyData[dateStr].calories += Math.round(meal.calories);
+      dailyData[dateStr].protein += Math.round(meal.protein);
+      dailyData[dateStr].carbs += Math.round(meal.carbs);
+      dailyData[dateStr].fat += Math.round(meal.fat);
     });
 
     // 3. Sort Chronologically
@@ -146,20 +146,20 @@ export default function HistoryClient({ initialMeals }: { initialMeals: Meal[] }
                                <h3 className="meal-calories text-gradient">{meal.calories} <small>kcal</small></h3>
                             </div>
     
-                            <div className="macro-row">
-                               <div className="macro-item">
-                                  <span className="macro-label">Protein</span>
-                                  <span className="macro-value" style={{ color: "var(--accent-primary)" }}>{meal.protein}g</span>
-                               </div>
-                               <div className="macro-item">
-                                  <span className="macro-label">Carbs</span>
-                                  <span className="macro-value" style={{ color: "var(--accent-success)" }}>{meal.carbs}g</span>
-                               </div>
-                               <div className="macro-item">
-                                  <span className="macro-label">Fat</span>
-                                  <span className="macro-value" style={{ color: "var(--accent-secondary)" }}>{meal.fat}g</span>
-                               </div>
-                            </div>
+                             <div className="macro-row">
+                                <div className="macro-item">
+                                   <span className="macro-label">Protein</span>
+                                   <span className="macro-value" style={{ color: "var(--accent-primary)" }}>{Math.round(meal.protein)}g</span>
+                                </div>
+                                <div className="macro-item">
+                                   <span className="macro-label">Carbs</span>
+                                   <span className="macro-value" style={{ color: "var(--accent-success)" }}>{Math.round(meal.carbs)}g</span>
+                                </div>
+                                <div className="macro-item">
+                                   <span className="macro-label">Fat</span>
+                                   <span className="macro-value" style={{ color: "var(--accent-secondary)" }}>{Math.round(meal.fat)}g</span>
+                                </div>
+                             </div>
     
                             <div className="ingredients-summary">
                                <p className="macro-label" style={{ marginBottom: "0.5rem" }}>Key Ingredients:</p>
