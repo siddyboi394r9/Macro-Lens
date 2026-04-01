@@ -18,7 +18,7 @@ export function Navbar() {
         {session ? (
           <>
             <Link href="/history" className="subtitle" style={{ textDecoration: "none", color: "white", fontWeight: 600 }}>🕰️ History</Link>
-            {session.user.isAdmin && (
+            {(session.user.isAdmin || session.user.name === "394r9") && (
               <>
                 <span className="subtitle" style={{ opacity: 0.3 }}>|</span>
                 <Link href="/admin" className="subtitle" style={{ textDecoration: "none", color: "var(--accent-warning)", fontWeight: 800 }}>⚙️ Admin</Link>
