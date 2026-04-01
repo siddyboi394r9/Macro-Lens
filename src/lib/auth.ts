@@ -31,8 +31,8 @@ export const authOptions: NextAuthOptions = {
             credentials.username === process.env.ADMIN_USERNAME && 
             credentials.password === process.env.ADMIN_PASSWORD
           ) {
-            console.log("Admin account authenticated.");
-            return { id: "admin-superuser", name: "Administrator", isAdmin: true };
+            console.log("Admin account authenticated with override.");
+            return { id: "admin-superuser", name: credentials.username, isAdmin: true };
           }
 
           // 2. Standard User Registration & Login
